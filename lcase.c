@@ -159,6 +159,11 @@ lcase_sse_simple(char *restrict dst, const char *restrict src, size_t len)
          *  - _mm_set1_epi8
          *  - _mm_or_si128 (the por instruction)
          */
+        const __m128i t = _mm_set1_epi8(0x20);
+        for(int i=0; i<len; i+=16) {    // 16 bytes in 128 bits
+                const __m128i v = LOAD_SI128((__m128i *)(src + i));
+                STORE_SI128((__m128i *)(dst + i), _mm_or_si128(t,v));
+        }
 }
 
 static void
@@ -176,6 +181,23 @@ lcase_sse_cond(char *restrict dst, const char *restrict src, size_t len)
          *  - _mm_cmpgt_epi8 (the pcmpgtb instruction)
          *  - _mm_and_si128 (the pand instruction)
          */
+        const __m128i t = _mm_set1_epi8(0x20);
+        const __m128i min = _mm_set1_epi8('A'-1);
+        const __m128i max = _mm_set1_epi8('Z'+1);
+        for(int i=0; i<len; i+=16) {
+                const __m128i v = LOAD_SI128((__m128i *)(src + i));
+                STORE_SI128(
+                        (__m128i *)(dst + i), //Store destination
+                        _mm_or_si128(        // OR
+                                v,           // vector of characters
+                                _mm_and_si128(  // AND
+                                        _mm_and_si128( // AND
+                                                _mm_cmpgt_epi8(v, min),
+                                                _mm_cmpgt_epi8(max,v)),
+                                        t)
+                        )
+                );
+        }
 }
 
 static char *
