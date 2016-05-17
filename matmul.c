@@ -104,9 +104,9 @@ matmul_block_sse(int i, int j, int k)
                     //c[2] = _mm_load_ps(&mat_c[i+2][j]);
                     //c[3] = _mm_load_ps(&mat_c[i+3][j]);
                     _MM_TRANSPOSE4_PS(b[0],b[1],b[2],b[3]);
-                    for(ii=i; ii<i+SSE_BLOCK_SIZE; ii++) {
-                        for(jj=j; jj<j+SSE_BLOCK_SIZE; jj++) {
-                            mat_c[ii][jj] += _mm_cvtss_f32(_mm_dp_ps(a[ii], b[jj], 0x8F));
+                    for(ii=0; ii<SSE_BLOCK_SIZE; ii++) {
+                        for(jj=0; jj<SSE_BLOCK_SIZE; jj++) {
+                            mat_c[ii+i][jj+j] += _mm_cvtss_f32(_mm_dp_ps(a[ii], b[jj], 0x8F));
                         }
                     }
              //   }
