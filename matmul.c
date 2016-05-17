@@ -262,7 +262,7 @@ matmul_sse()
          for(i=0; i<SIZE; i++) {
             for(k=0; k<SIZE; k++) {
                 for(j=0; j<SIZE; j+=4) {
-                    __m128 a = _mm_set1_ps(&mat_a[i][k]);
+                    __m128 a = _mm_set1_ps(mat_a[i][k]);
                     __m128 b = _mm_load_ps(&mat_b[k][j]);
                     __m128 c = _mm_load_ps(&mat_c[i][j]);
                     c = _mm_add_ps(_mm_mul_ps(a,b), c);
