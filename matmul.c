@@ -266,7 +266,7 @@ matmul_sse()
                     __m128 b = _mm_load_ps(mat_b[k][j]);
                     __m128 c = _mm_load_ps(mat_c[i][j]);
                     c = _mm_add_ps(_mm_mul_ps(a,b), c);
-                    _mm_store_ps((__m128 *) &mat_c[i][j], c);
+                    _mm_store_ps(&mat_c[i][j], c);
                 }
             }
          }
