@@ -56,6 +56,17 @@ matvec_sse()
          * HINT: You can create the sum of all elements in a vector
          * using two hadd instructions.
          */
+
+        for(int i=0; i<SIZE; i++) {
+            for(int j=0; j<SIZE; j+=4) {
+                const __m128 v = _mm_load_ps(vec_b + j);
+                const __m128 m = _mm_load_ps(mat_a + (MINDEX(i,j)));
+                const __m128 x = _mm_mul_ps(v,m);
+                x = _mm_hadd_ps(x,x);
+                x = _mm_hadd_ps(x,x);
+                vec_c[i] += _mm_cvtss_f32(x);
+            }
+         }
 }
 
 /**
