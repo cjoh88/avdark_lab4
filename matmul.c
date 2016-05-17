@@ -83,11 +83,11 @@ matmul_block_sse(int i, int j, int k)
          * parameter can be used to restrict to which elements the
          * result is stored, all other elements are set to zero.
          */
-         int i,j,k;
-         int ii,jj,kk;
-         for(i=0; i<SIZE; i+=SSE_BLOCK_SIZE) {
-            for(k=0; k<SIZE; k+=SSE_BLOCK_SIZE) {
-                for(j=0; j<SIZE; j+SSE_BLOCK_SIZE) {
+         //int i,j,k;
+         //int ii,jj,kk;
+         //for(i=0; i<SIZE; i+=SSE_BLOCK_SIZE) {
+            //for(k=0; k<SIZE; k+=SSE_BLOCK_SIZE) {
+                //for(j=0; j<SIZE; j+SSE_BLOCK_SIZE) {
                     __m128 a[4];
                     __m128 b[4];
                     __m128 c[4];
@@ -109,9 +109,9 @@ matmul_block_sse(int i, int j, int k)
                             mat_c[ii][jj] += _mm_cvtss_f32(_mm_dp_ps(a[ii], b[jj], 0x8F));
                         }
                     }
-                }
-            }
-         }
+             //   }
+           // }
+         //}
 
 }
 #elif MODE == MODE_BLOCKED
