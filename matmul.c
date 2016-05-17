@@ -83,38 +83,24 @@ matmul_block_sse(int i, int j, int k)
          * parameter can be used to restrict to which elements the
          * result is stored, all other elements are set to zero.
          */
-         //int i,j,k;
-         //int ii,jj,kk;
-         //for(i=0; i<SIZE; i+=SSE_BLOCK_SIZE) {
-            //for(k=0; k<SIZE; k+=SSE_BLOCK_SIZE) {
-                //for(j=0; j<SIZE; j+SSE_BLOCK_SIZE) {
-                    __m128 a[4];
-                    __m128 b[4];
-                    __m128 c[4];
-                    a[0] = _mm_load_ps(&mat_a[i][k]);
-                    a[1] = _mm_load_ps(&mat_a[i+1][k]);
-                    a[2] = _mm_load_ps(&mat_a[i+2][k]);
-                    a[3] = _mm_load_ps(&mat_a[i+3][k]);
-                    b[0] = _mm_load_ps(&mat_b[k][j]);
-                    b[1] = _mm_load_ps(&mat_b[k+1][j]);
-                    b[2] = _mm_load_ps(&mat_b[k+2][j]);
-                    b[3] = _mm_load_ps(&mat_b[k+3][j]);
-                    //c[0] = _mm_load_ps(&mat_c[i][j]);
-                    //c[1] = _mm_load_ps(&mat_c[i+1][j]);
-                    //c[2] = _mm_load_ps(&mat_c[i+2][j]);
-                    //c[3] = _mm_load_ps(&mat_c[i+3][j]);
-                    _MM_TRANSPOSE4_PS(b[0],b[1],b[2],b[3]);
-                    for(int ii=0; ii<SSE_BLOCK_SIZE; ii++) {
-                        for(int jj=0; jj<SSE_BLOCK_SIZE; jj++) {
-                            //printf("%f\n", _mm_cvtss_f32(_mm_dp_ps(a[ii], b[jj], 0x1F)));
-                            mat_c[ii+i][jj+j] += _mm_cvtss_f32(_mm_dp_ps(a[ii], b[jj], 0xF1));
-                        }
-                    }
-             //   }
-           // }
-         //}
-
+        __m128 a[4];
+        __m128 b[4];
+        a[0] = _mm_load_ps(&mat_a[i][k]);
+        a[1] = _mm_load_ps(&mat_a[i+1][k]);
+        a[2] = _mm_load_ps(&mat_a[i+2][k]);
+        a[3] = _mm_load_ps(&mat_a[i+3][k]);
+        b[0] = _mm_load_ps(&mat_b[k][j]);
+        b[1] = _mm_load_ps(&mat_b[k+1][j]);
+        b[2] = _mm_load_ps(&mat_b[k+2][j]);
+        b[3] = _mm_load_ps(&mat_b[k+3][j]);
+        _MM_TRANSPOSE4_PS(b[0],b[1],b[2],b[3]);
+        for(int ii=0; ii<SSE_BLOCK_SIZE; ii++) {
+            for(int jj=0; jj<SSE_BLOCK_SIZE; jj++) {
+                mat_c[ii+i][jj+j] += _mm_cvtss_f32(_mm_dp_ps(a[ii], b[jj], 0xF1));
+            }
+        }
 }
+
 #elif MODE == MODE_BLOCKED
 /**
  * Blocked matrix multiplication, SSE block (4x4 matrix) implemented
