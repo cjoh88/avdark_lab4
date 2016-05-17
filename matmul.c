@@ -106,7 +106,7 @@ matmul_block_sse(int i, int j, int k)
                     _MM_TRANSPOSE4_PS(b[0],b[1],b[2],b[3]);
                     for(int ii=0; ii<SSE_BLOCK_SIZE; ii++) {
                         for(int jj=0; jj<SSE_BLOCK_SIZE; jj++) {
-                            printf("%f\n", _mm_cvtss_f32(_mm_dp_ps(a[ii], b[jj], 0x1F)));
+                            //printf("%f\n", _mm_cvtss_f32(_mm_dp_ps(a[ii], b[jj], 0x1F)));
                             mat_c[ii+i][jj+j] += _mm_cvtss_f32(_mm_dp_ps(a[ii], b[jj], 0x1F));
                         }
                     }
